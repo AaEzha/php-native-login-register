@@ -1,4 +1,23 @@
-<?php include "database.php"; ?>
+<?php include "database.php";
+if(isset($_POST['login'])){
+  $username = trim(htmlspecialchars($_POST['username']));
+  $password = trim(htmlspecialchars($_POST['password']));
+
+  // cek ada akunnya atau tidak
+  $cek = "select id from users where username='$username' and password=md5('$password')";
+  $query_cek = mysqli_query($db, $cek);
+  $jum = mysqli_num_rows($query_cek);
+  if($jum == 1){
+      $_SESSION['tw_login'] = $username;
+      header("Location:dashboard.php");
+      return true;
+  }else{
+      $_SESSION['message'] = "Error: Gagal login";
+      header("Location:login.php");
+      return false;
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
